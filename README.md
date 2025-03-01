@@ -1,4 +1,4 @@
-﻿# Smart Fish Tank  
+# Smart Fish Tank  
 
 This project involves the design and implementation of a **Smart Fish Tank** with the following innovative features:  
 
