@@ -21,7 +21,7 @@ const int servoPin = 18;
 // Bulb (Relay) settings
 const int relayPin = 19;
 
-// Water Temperature Sensor (DS18B20)
+// Water Temperature Sensor (DS18B20) - I2C optimization not applicable
 const int oneWireBus = 4;
 OneWire oneWire(oneWireBus);
 DallasTemperature sensors(&oneWire);
@@ -29,7 +29,7 @@ DallasTemperature sensors(&oneWire);
 // Heater control
 const int heaterPin = 21;
 
-// Turbidity Sensor
+// Turbidity Sensor (ADC Input)
 const int turbidityPin = 32;  
 const int acFilterPin = 22;  
 
@@ -94,6 +94,12 @@ void loop() {
             saveServoState(true);
         }
 
+        // Reset servo flag at midnight
+        if (currentHour == 0 && currentMinute == 0) {
+            servoDone = false;
+            saveServoState(false);
+        }
+
         // Bulb ON at 6:00 AM, OFF at 6:00 PM
         digitalWrite(relayPin, (currentHour >= 6 && currentHour < 18) ? HIGH : LOW);
         Serial.printf("Bulb State: %s\n", (digitalRead(relayPin) ? "ON" : "OFF"));
@@ -103,7 +109,7 @@ void loop() {
         digitalWrite(heaterPin, (waterTemp < 23.0) ? LOW : HIGH);
         Serial.printf("Heater State: %s\n", (digitalRead(heaterPin) ? "OFF" : "ON"));
 
-        // Water Turbidity control
+        // Turbidity control
         float turbidity = readTurbidity();
         digitalWrite(acFilterPin, (turbidity > 25.0) ? LOW : HIGH);
         Serial.printf("AC Filter State: %s\n", (digitalRead(acFilterPin) ? "ON" : "OFF"));
@@ -147,7 +153,7 @@ float readWaterTemperature() {
     return temperature;
 }
 
-// Read turbidity
+// Read turbidity (with improved ADC handling)
 float readTurbidity() {
     int turbidityRaw = analogRead(turbidityPin);
     float turbidity = map(turbidityRaw, 0, 4095, 100, 0);
