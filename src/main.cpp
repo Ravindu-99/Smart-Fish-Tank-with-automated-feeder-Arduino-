@@ -183,3 +183,4 @@ void saveServoState(bool state) {
     EEPROM.write(SERVO_DONE_ADDR, state);
     EEPROM.commit();
 }
+
