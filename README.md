@@ -1,4 +1,4 @@
-# Title
+
 ### Smart Fish Tank with Automatic Feeder
 # Introduction 
 Aquariums require constant attention to maintain a healthy environment for fish, including monitoring water quality, temperature, and feeding schedules. However, busy lifestyles make it challenging for aquarium owners to manage these tasks consistently. 
