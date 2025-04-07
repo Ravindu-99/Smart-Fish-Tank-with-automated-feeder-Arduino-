@@ -2,8 +2,7 @@
 #include <time.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
-#include <ESP32Servo.h>
-#include <EEPROM.h>
+#include <ESP32Servo.h> 
 
 // Wi-Fi credentials
 const char* ssid = "RRBJ-MIFI";
@@ -19,7 +18,7 @@ Servo myServo;
 const int servoPin = 18;
 
 // Bulb (Relay) settings
-const int relayPin = 19;
+const int relayPin = 2;
 
 // Water Temperature Sensor (DS18B20)
 const int oneWireBus = 4;
@@ -27,11 +26,11 @@ OneWire oneWire(oneWireBus);
 DallasTemperature sensors(&oneWire);
 
 // Heater control
-const int heaterPin = 21;
+const int heaterPin = 5;
 
 // Turbidity Sensor
-const int turbidityPin = 32;  
-const int acFilterPin = 22;  
+const int turbidityPin = 34;  
+const int acFilterPin = 18;  
 
 unsigned long lastCheckTime = 0;
 
@@ -80,7 +79,7 @@ void loop() {
         int currentSecond = timeInfo.tm_sec;
 
         // Run feeder at 11:00 AM
-        if (currentHour == 11 && currentMinute == 00 && currentSecond == 0) {
+        if (currentHour == 11 && currentMinute == 00 && currentSecond == 00) {
             Serial.println("Feeder ON 11:00 AM");
             rotateServo();
         }
@@ -89,7 +88,7 @@ void loop() {
         if ((currentHour > 6 || (currentHour == 6 && currentMinute >= 00)) &&
             (currentHour < 18 || (currentHour == 18 && currentMinute < 00))) {
             digitalWrite(relayPin, HIGH);  // Bulb ON
-            Serial.println("Bulb is ON (6:15 AM - 6:15 PM)");
+            Serial.println("Bulb is ON (6:00 AM - 6:00 PM)");
         } else {
             digitalWrite(relayPin, LOW);  // Bulb OFF
             Serial.println("Bulb is OFF (Night Mode)");
